@@ -9,11 +9,10 @@ def function(x,a,*args):
 
     print(coefficients)
 
-    result = x**2 * 0
-    print(type(result))
+    result = x * 0
 
     for i in range(n, -1, -1):
-        result += coefficients[n-i] * x ** n
+        result += coefficients[n-i] * x ** i
 
     return result
 x = np.linspace(-10, 10, 100)
