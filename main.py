@@ -4,25 +4,44 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import math
+import copy
 
 def function(x,a,b,c,d):
     solution = (a * x ** 3) + (b * x ** 2) + (c * x) + d
     return solution
 
-def solver(first, second, third):
-    a1, b1, c1, d1 = first[0:4]
-    a2, b2, c2, d2 = second[0:4]
-    a3, b3, c3, d3 = third[0:4]
+def solver(first,*args):
+    equls = []
+    equls.append(first)
 
-    delta = ((a1*b2*c3 + a3*b1*c2 + a2*b3*c1) - (a3*b2*c1 + a2*b1*c3 + a1*b3*c2))
+    for i in args:
+        equls.append(i)
 
-    x = ((b2*c3*d1 + b1*c2*d3 + b3*c1*d2) - (b2*c1*d3 + b1*c3*d2 + b3*c2*d1)) / delta
+    print(equls)
 
-    y = ((a1*c3*d2 + a3*c2*d1 + a2*c1*d3) - (a3*c1*d2 + a2*c3*d1 + a1*c2*d3)) / delta
+    n = len(first) - 1
+    print(f"{n}원 연립 일차 방정식")
 
-    z = ((a1*b2*d3 + a3*b1*d2 + a2*b3*d1) - (a3*b2*d1 + a2*b1*d3 + a1*b3*d2)) / delta
+    matA = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            matA[i][j] = equls[i][j]
 
-    return [x, y, z]
+    matj = copy.deepcopy(matA)
+
+    detA = np.linalg.det(matA)
+
+    result  = []
+
+    for j in range(n):
+        for i in range(n):
+            matj[i][j] = equls[i][-1]
+        detj = np.linalg.det(matj)
+        result.append(detj/detA)
+
+        matj = copy.deepcopy(matA)
+
+    return result
 
 point = [(5,2), (1,0), (9,7)] #접접의 좌표
 
