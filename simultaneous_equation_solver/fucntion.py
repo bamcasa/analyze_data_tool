@@ -23,7 +23,7 @@ def find_equlation(points):
 
     return result
 
- = np.linspace(-10, 10, 100)
+x = np.linspace(-10, 10, 100)
 #x = 1
 a = 1
 b = 1

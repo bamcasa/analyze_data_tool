@@ -25,7 +25,7 @@ def function(x, a, *args):
 
 def solver(equls):
 
-    print(equls)
+    #print(equls)
 
     n = len(equls[0]) - 1
     print(f"{n}원 연립 일차 방정식")
@@ -51,8 +51,8 @@ def solver(equls):
 
     return result
 
-point = [(5,2), (1,0), (9,7)] #접접의 좌표
 
+point = [(10,50), (2,10), (9,7)] #접접의 좌표
 
 P_x = []
 for i in range(len(point)):
@@ -62,22 +62,41 @@ P_x = np.array(P_x)
 
 a = 1 #최고차항의 계수
 
+P_count = len(P_x)
 
-x1, y1 = point[0]
-equation_1 = [x1**2, x1, 1, y1 - a * x1**3]
-x2, y2 = point[1]
-equation_2 = [x2**2, x2, 1, y2 - a * x2**3]
-x3, y3 = point[2]
-equation_3 = [x3**2, x3, 1, y3 - a * x3**3]
-print(equation_1,equation_2,equation_3)
+X = np.arange(P_count)
+Y = np.arange(P_count)
 
-temp = solver([equation_1,equation_2,equation_3])
-b,c,d = temp
-print(a,b,c,d)
+for i in range(P_count):
+    X[i], Y[i] = point[i]
+
+#print("==============")
+#print(X,Y)
+
+equations = []
+
+for i in range(P_count):
+    n = P_count
+    temp = []
+    for j in range(n):
+        value = X[i] ** (n-1-j)
+        temp.append(value)
+    temp.append(Y[i] - a * X[i] ** n)
+    equations.append(temp)
+print(equations)
+
+temp = solver(equations)
+
+coes = []
+coes.append(a)
+for i in temp:
+    coes.append(i)
+
+print(coes)
 
 
-for i in range(len(point)):
-    print(point[i][1], function(point[i][0],a,b,c,d),abs(point[i][1] - function(point[i][0],a,b,c,d)))
+#for i in range(len(point)):
+#    print(point[i][1], function(point[i][0],a,b,c,d),abs(point[i][1] - function(point[i][0],a,b,c,d)))
 
 
 
@@ -88,7 +107,7 @@ for i in range(len(point)):
 
 #x_range = [int(solutions[0] - M) - 10, int(solutions[1] + M) + 10]
 x_range = [P_x[0],P_x[-1]]
-print(x_range)
+#print(x_range)
 
 x = np.linspace(x_range[0], x_range[1], 1000)
 #x = np.linspace(P_x[0], P_x[-1], 1000)
@@ -121,7 +140,7 @@ ax2.set_xlim(ax1.get_xlim())
 ax2.set_ylim(ax1.get_ylim())
 ax2.spines['right'].set_position(('data', 0))
 ax2.scatter(P_x, function(P_x,a,b,c,d), s=50, c='r')
-print(P_x,function(P_x,a,b,c,d))
+#print(P_x,function(P_x,a,b,c,d))
 ax1.set_zorder(ax2.get_zorder() - 10)
 #ax1.patch.set_visible(False)
 
