@@ -6,20 +6,28 @@ from matplotlib.ticker import MaxNLocator
 import math
 import copy
 
-def function(x,a,b,c,d):
-    solution = (a * x ** 3) + (b * x ** 2) + (c * x) + d
+
+def function(x, a, *args):
+    n = len(args)
+    #print(f"{n}차 함수")
+
+    coefficients = list(args)
+    coefficients.insert(0, a)
+
+    #print(coefficients)
+    x1 = np.array(x).astype(np.float64)
+    solution = x1 * 0
+
+    for i in range(n, -1, -1):
+        solution += coefficients[n-i] * x ** i
+
     return solution
 
-def solver(first,*args):
-    equls = []
-    equls.append(first)
-
-    for i in args:
-        equls.append(i)
+def solver(equls):
 
     print(equls)
 
-    n = len(first) - 1
+    n = len(equls[0]) - 1
     print(f"{n}원 연립 일차 방정식")
 
     matA = np.zeros((n, n))
@@ -52,7 +60,8 @@ for i in range(len(point)):
 P_x = sorted(P_x)
 P_x = np.array(P_x)
 
-a = 1
+a = 1 #최고차항의 계수
+
 
 x1, y1 = point[0]
 equation_1 = [x1**2, x1, 1, y1 - a * x1**3]
@@ -62,7 +71,7 @@ x3, y3 = point[2]
 equation_3 = [x3**2, x3, 1, y3 - a * x3**3]
 print(equation_1,equation_2,equation_3)
 
-temp = solver(equation_1,equation_2,equation_3)
+temp = solver([equation_1,equation_2,equation_3])
 b,c,d = temp
 print(a,b,c,d)
 

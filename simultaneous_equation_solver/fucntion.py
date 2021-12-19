@@ -15,10 +15,19 @@ def function(x,a,*args):
         result += coefficients[n-i] * x ** i
 
     return result
-x = np.linspace(-10, 10, 100)
+
+def find_equlation(points):
+    n = len(points)
+
+    result = []
+
+    return result
+
+ = np.linspace(-10, 10, 100)
 #x = 1
 a = 1
 b = 1
 c = 1
 d = 1
-result = function(x,a,b,c)
+#result = function(x,a,b,c)
+print(find_equlation(x,))
