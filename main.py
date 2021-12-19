@@ -7,12 +7,11 @@ import math
 import copy
 
 
-def function(x, a, *args):
-    n = len(args)
+def function(x, coes):
+    n = len(coes) - 1
     #print(f"{n}차 함수")
 
-    coefficients = list(args)
-    coefficients.insert(0, a)
+    coefficients = coes
 
     #print(coefficients)
     x1 = np.array(x).astype(np.float64)
@@ -111,7 +110,7 @@ x_range = [P_x[0],P_x[-1]]
 
 x = np.linspace(x_range[0], x_range[1], 1000)
 #x = np.linspace(P_x[0], P_x[-1], 1000)
-y = function(x,a,b,c,d)
+y = function(x,coes)
 
 plt.style.use('default')
 plt.rcParams['figure.figsize'] = (10, 10)
@@ -139,7 +138,7 @@ ax2 = ax1#.twinx()
 ax2.set_xlim(ax1.get_xlim())
 ax2.set_ylim(ax1.get_ylim())
 ax2.spines['right'].set_position(('data', 0))
-ax2.scatter(P_x, function(P_x,a,b,c,d), s=50, c='r')
+ax2.scatter(P_x, function(P_x,coes), s=50, c='r')
 #print(P_x,function(P_x,a,b,c,d))
 ax1.set_zorder(ax2.get_zorder() - 10)
 #ax1.patch.set_visible(False)
