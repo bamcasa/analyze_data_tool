@@ -51,14 +51,46 @@ def solver(equls):
     return result
 
 
-point = [(10,50), (2,10), (9,7)] #접접의 좌표
+points = [(10, 50), (2, 10), (9, 7), (3,2), (4,6), (7, 100)] #접접의 좌표
 
 P_x = []
-for i in range(len(point)):
-    P_x.append(point[i][0])
-P_x = sorted(P_x)
+for i in range(len(points)):
+    P_x.append(points[i][0])
+
 P_x = np.array(P_x)
 
+s = P_x.argsort()
+
+P_x = np.array(sorted(list(P_x)))
+
+sorted_points = []
+for i in range(len(s)):
+    sorted_points.append(points[s[i]])
+
+points = sorted_points
+
+print(sorted_points)
+#============
+
+m = []
+n = []
+
+for i in range(len(P_x) - 1):
+    x1,y1 = points[i]
+    x2,y2 = points[i+1]
+    m.append((y2 - y1)/(x2 - x1))          # 기울기 m 계산
+    n.append(y1 - (m[i] * x1))
+print(m,n)
+L_x = []
+for i in range(len(P_x)-1):
+    L_x.append(np.linspace(P_x[i],P_x[i+1], 1000))
+L_y = []
+for i in range(len(m)):
+    L_y.append(m[i] * L_x[i] + n[i])
+
+
+
+#=============================
 a = 1 #최고차항의 계수
 
 P_count = len(P_x)
@@ -67,7 +99,7 @@ X = np.arange(P_count)
 Y = np.arange(P_count)
 
 for i in range(P_count):
-    X[i], Y[i] = point[i]
+    X[i], Y[i] = points[i]
 
 #print("==============")
 #print(X,Y)
@@ -94,8 +126,8 @@ for i in temp:
 print(coes)
 
 
-#for i in range(len(point)):
-#    print(point[i][1], function(point[i][0],a,b,c,d),abs(point[i][1] - function(point[i][0],a,b,c,d)))
+#for i in range(len(points)):
+#    print(points[i][1], function(points[i][0],a,b,c,d),abs(points[i][1] - function(points[i][0],a,b,c,d)))
 
 
 
@@ -143,6 +175,12 @@ ax2.scatter(P_x, function(P_x,coes), s=50, c='r')
 ax1.set_zorder(ax2.get_zorder() - 10)
 #ax1.patch.set_visible(False)
 
+
+ax3 = ax1#.twinx()
+ax3.set_xlim(ax1.get_xlim())
+ax3.set_ylim(ax1.get_ylim())
+for i in range(len(P_x) - 1):
+    ax3.plot(L_x[i], L_y[i])
 
 
 #plt.xlim([P_x[0], P_x[-1]])
