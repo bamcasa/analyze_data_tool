@@ -1,4 +1,5 @@
 from fractions import Fraction
+from sympy import Integral, Symbol, pprint
 import time
 import numpy as np
 import matplotlib.pyplot as plt
@@ -51,7 +52,7 @@ def solver(equls):
     return result
 
 
-points = [(10, 50), (2, 10), (9, 7), (3,2), (4,6), (7, 100)] #접접의 좌표
+points = [(3, 5), (5, 10), (7, 15),(0,0)] #접접의 좌표
 
 P_x = []
 for i in range(len(points)):
@@ -70,27 +71,25 @@ for i in range(len(s)):
 points = sorted_points
 
 print(sorted_points)
-#============
+#============ # 직선
 
-m = []
-n = []
+L_m = []
+L_n = []
 
 for i in range(len(P_x) - 1):
     x1,y1 = points[i]
     x2,y2 = points[i+1]
-    m.append((y2 - y1)/(x2 - x1))          # 기울기 m 계산
-    n.append(y1 - (m[i] * x1))
-print(m,n)
+    L_m.append((y2 - y1)/(x2 - x1))          # 기울기 m 계산
+    L_n.append(y1 - (L_m[i] * x1))
+print(L_m,L_n)
 L_x = []
 for i in range(len(P_x)-1):
     L_x.append(np.linspace(P_x[i],P_x[i+1], 1000))
 L_y = []
-for i in range(len(m)):
-    L_y.append(m[i] * L_x[i] + n[i])
+for i in range(len(L_m)):
+    L_y.append(L_m[i] * L_x[i] + L_n[i])
 
-
-
-#=============================
+#============================= 곡선
 a = 1 #최고차항의 계수
 
 P_count = len(P_x)
@@ -100,9 +99,6 @@ Y = np.arange(P_count)
 
 for i in range(P_count):
     X[i], Y[i] = points[i]
-
-#print("==============")
-#print(X,Y)
 
 equations = []
 
@@ -124,7 +120,49 @@ for i in temp:
     coes.append(i)
 
 print(coes)
+func_str = "y = "
+for i in range(len(coes) - 1):
+    if len(coes) -1  - i == 1:
+        func_str += f"{coes[i]} * x + {coes[i + 1]}"
+    else:
+        func_str += f"{coes[i]} * x^{len(coes) - i - 1} + "
+print(func_str)
 
+#=================== #정적분
+t = Symbol('t')
+f = 0
+g = []
+h = []
+n = len(coes) - 1
+temp = 0
+temp2 = 0
+
+for i in range(n, -1, -1):
+    temp += coes[n - i] * t ** i
+    f = temp
+for i in range(len(L_m)):
+    temp2 = L_m[i] * t + L_n[i]
+    g.append(temp2)
+for i in range(len(g)):
+    h.append(f - g[i])
+
+"""print("\n")
+pprint(f)
+print("\n")
+pprint(g)
+print("\n")
+pprint(h)
+print("\n")
+"""
+Integral_values = []
+for i in range(len(h)):
+    Integral_values.append(abs(Integral(h[i], (t, P_x[i], P_x[i+1])).doit().evalf()))
+#print(Integral_values)
+
+Integral_values_SUM = sum(Integral_values)
+print("정적분 값 : ",Integral_values_SUM)
+
+#==============================================================
 
 #for i in range(len(points)):
 #    print(points[i][1], function(points[i][0],a,b,c,d),abs(points[i][1] - function(points[i][0],a,b,c,d)))
